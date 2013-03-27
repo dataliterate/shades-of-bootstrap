@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Shades ⊙ƒ Bootstrap</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    
+    <script type="text/javascript">
+      var SOB = {};
+
+      var v = window.location.search.replace('?', '');
+      SOB.bootstrap = 'bootstrap';
+      if(['bootstrap', 'bootstrap-2.3.1'].indexOf(v) !== -1) {
+        SOB.bootstrap = v;
+      }
+      
+      // initial client side less:
+      var link = document.createElement('link');
+      link.setAttribute('rel', 'stylesheet/less');
+      link.setAttribute('href', 'shades-' + SOB.bootstrap + '.less');
+      document.getElementsByTagName('head')[0].appendChild(link);
+
+      if(SOB.bootstrap == 'bootstrap-2.3.1') {
+        var link = document.createElement('link');
+        link.setAttribute('rel', 'stylesheet');
+        link.setAttribute('href', SOB.bootstrap + '/docs/assets/css/bootstrap-responsive.css');
+        document.getElementsByTagName('head')[0].appendChild(link);
+      }
+      
+    </script>
+    <script type="text/javascript" src="jquery.js"></script>
+    <script type="text/javascript" src="underscore.js"></script>
+    <script type="text/javascript" src="lessjs/dist/less-1.4.0-beta.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="shades-ui.css" />
+
+    <script type="text/javascript" src="curve.js"></script>
+    <script type="text/javascript" src="shades.js"></script>
+    <script type="text/javascript" src="monotoniccubicspline.js"></script>
+
+    <script type="text/template" id="xx">
+      <tr>
+        <td>
+          <%= names %>
+        </td>
+        <td>
+          <div class="color">
+            <input type="color" value="<%= hex %>" disabled>
+          </div>
+        </td>
+        <td>
+          <div class="color">
+            <input type="color" name="<%= vars %>" value="<%= hex %>">
+          </div>
+        </td>
+        <td>
+          <div class="range">
+            <input type="range" min="0" max="1" step="0.01" value="0">
+          </div>
+        </td>
+      </tr>
+    </script>
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="assets/js/html5shiv.js"></script>
+    <![endif]-->
+  </head>
+
+  <body id="shades">
+
+
+  <header>
+    <div class="container">
+      <div class="row">
+        <div class="span12">
+          <h1>Shades ⊙ƒ Bootstrap</h1>
+          <p class="lead">An experimental approach to bootstrap customization</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+  <div class="container">
+
+          <div class="row">
+            <div class="span12">
+              <label>Bootstrap Version</label>
+              <select id="bootstrap-version">
+                <option value="bootstrap">Bootstrap 3.0.0-wip</option>
+                <option value="bootstrap-2.3.1">Bootstrap 2.3.1</option>
+              </select>
+              <small>Warning: reloads page</small>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="span6">
+              <h2>Envelope</h2>
+              <div class="curve">
+                
+                <canvas id="shades-curve" height="256" width="512"></canvas>
+                <div class="y-legend">Strength of Color Mix Effect</div>
+                <div class="x-legend" style="width:512px">
+                  <div class="x-legend-left">Dark</div>
+                  <div class="x-legend-right">Light</div>
+                </div>
+                <div class="hints">
+                  <small>
+                    [SHIFT] + Click: Add Point to Curve, [ALT] + Click on Point: Delete Point
+                  </small>
+                </div>
+              </div>
+            </div>
+            <div class="span6">
+              <h2>Shade</h2>
+              <div class="shade-color">
+                <label>Color</label>
+                <div class="color">
+                  <input type="color" id="brand" name="@brand" value="#773514">
+                </div>
+                  <label><input type="checkbox" id="apply-colors"> Modify other than grayscale colors</label>
+                <div class="form-actions">
+                  <a href="#" class="apply btn">Apply</a> <span class="update-hint">&larr; Click to update</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+         <hr>
+
+          <div class="row">
+            <div class="span12">
+              <ul class="nav nav-tabs" id="info">
+                <li class="active"><a href="#tab-grayscales" data-toggle="tab">Grayscale Color Definitions</a></li>
+                <li><a href="#tab-others" data-toggle="tab">Other Color Definitions</a></li>
+                <li><a href="#tab-examples" data-toggle="tab">Examples</a></li>
+              </ul>
+            </div>
+          </div>
+
+          
+          <div class="row">
+            <div class="span12">
+              <div class="tab-content">
+                <div class="tab-pane active" id="tab-grayscales">
+                  <h2>Grayscale Color Definitions</h2>
+                  <table class="table color-rules" id="shades-grayscale">
+                    <thead>
+                      <tr>
+                        <th>
+                          Name
+                        </th>
+                        <th>
+                          Default
+                        </th>
+                        <th>
+                          Adjusted
+                        </th>
+                        <th>
+                          Effect
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div class="tab-pane" id="tab-others">
+                  <h2>Other Color Definitions</h2>
+                  <table class="table color-rules" id="shades-colors">
+                    <thead>
+                      <tr>
+                        <th>
+                          Name
+                        </th>
+                        <th>
+                          Default
+                        </th>
+                        <th>
+                          Adjusted
+                        </th>
+                        <th>
+                          Effect
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                  </table>
+                </div>
+
+
+                <div class="tab-pane" id="tab-examples">
+                <h2>Examples</h2>
+
+<form class="bs-docs-example">
+  <fieldset>
+    <legend>Legend</legend>
+    <label>Label name</label>
+    <input type="text" placeholder="Type something…">
+    <span class="help-block">Example block-level help text here.</span>
+    <label class="checkbox">
+      <input type="checkbox"> Check me out
+    </label>
+    <button type="submit" class="btn">Submit</button>
+  </fieldset>
+</form>
+
+<table class="table table-bordered table-striped">
+  <thead>
+    <tr>
+      <th>Button</th>
+      <th>class=""</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><button type="button" class="btn">Default</button></td>
+      <td><code>btn</code></td>
+      <td>Standard gray button with gradient</td>
+    </tr>
+    <tr>
+      <td><button type="button" class="btn btn-primary">Primary</button></td>
+      <td><code>btn btn-primary</code></td>
+      <td>Provides extra visual weight and identifies the primary action in a set of buttons</td>
+    </tr>
+    <tr>
+      <td><button type="button" class="btn btn-info">Info</button></td>
+      <td><code>btn btn-info</code></td>
+      <td>Used as an alternative to the default styles</td>
+    </tr>
+    <tr>
+      <td><button type="button" class="btn btn-success">Success</button></td>
+      <td><code>btn btn-success</code></td>
+      <td>Indicates a successful or positive action</td>
+    </tr>
+    <tr>
+      <td><button type="button" class="btn btn-warning">Warning</button></td>
+      <td><code>btn btn-warning</code></td>
+      <td>Indicates caution should be taken with this action</td>
+    </tr>
+    <tr>
+      <td><button type="button" class="btn btn-danger">Danger</button></td>
+      <td><code>btn btn-danger</code></td>
+      <td>Indicates a dangerous or potentially negative action</td>
+    </tr>
+    <tr>
+      <td><button type="button" class="btn btn-inverse">Inverse</button></td>
+      <td><code>btn btn-inverse</code></td>
+      <td>Alternate dark gray button, not tied to a semantic action or use</td>
+    </tr>
+    <tr>
+      <td><button type="button" class="btn btn-link">Link</button></td>
+      <td><code>btn btn-link</code></td>
+      <td>Deemphasize a button by making it look like a link while maintaining button behavior</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="bs-docs-example">
+  <div class="dropdown clearfix">
+    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu" style="display: block; position: static; margin-bottom: 5px; *width: 180px;">
+      <li><a tabindex="-1" href="#">Action</a></li>
+      <li><a tabindex="-1" href="#">Another action</a></li>
+      <li><a tabindex="-1" href="#">Something else here</a></li>
+      <li class="divider"></li>
+      <li><a tabindex="-1" href="#">Separated link</a></li>
+    </ul>
+  </div>
+</div>
+
+<div class="bs-docs-example">
+  <div class="pagination pagination-centered">
+    <ul>
+      <li class="disabled"><a href="#">«</a></li>
+      <li class="active"><a href="#">1</a></li>
+      <li><a href="#">2</a></li>
+      <li><a href="#">3</a></li>
+      <li><a href="#">4</a></li>
+      <li><a href="#">5</a></li>
+      <li><a href="#">»</a></li>
+   </ul>
+  </div>
+</div>
+
+                </div>
+
+              </div>
+            </div>
+          </div>
+  </div>
+
+
+
+  <script src="bootstrap/docs/assets/js/bootstrap-tab.js"></script>
+
+    <!-- Footer
+    ================================================== -->
+    <footer class="footer">
+      <div class="container">
+        <div class="row">
+          <div class="span12">
+            <p>Experiment. Built by a <a href="http://precious-forever.com">precious</a> by <a href="http://twitter.com/rockitbaby/">Michael Schieben</a>.</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
