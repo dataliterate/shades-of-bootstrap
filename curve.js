@@ -17,11 +17,6 @@ function ColorCurve(canvas, callback)
   this.rgb      = [];
   this.onchange   = callback;
 
-  if (this.height != this.width) {
-    console.log("ERROR: Canvas must have same width and height.");
-    //return;
-  }
-
   this.points.push({x: 0, y: 0.5});
   this.points.push({x: 0.5, y: 0.15});
   //this.points.push({x: 0.5, y: 0.5});
@@ -68,22 +63,6 @@ ColorCurve.prototype.Draw = function()
   this.ctx.clearRect(0, 0, this.width, this.height);
   this.DrawGrid();
   
-  /*
-  for(i=0;i<this.points.length-1;i++)
-  {
-    if (i<1) { 
-      p1 = this.points[0];
-    } else { 
-      p1 = this.points[i-1];
-    }  
-    if (i+2 > this.points.length-1) {
-      p4 = this.points[i+1];
-    } else { 
-      p4 = this.points[i+2];
-    } 
-    this.Quadratic(p1,this.points[i],this.points[i+1],p4);
-  }
-  */
   var xs = [];
   var ys = [];
   this.points.forEach(function(point) {
@@ -92,7 +71,6 @@ ColorCurve.prototype.Draw = function()
   });
 
   this.curve = new MonotonicCubicSpline(xs, ys);
-  console.log(this.curve);
   this.drawCurve();
   this.DrawPoints();
   
