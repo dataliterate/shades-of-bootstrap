@@ -10,7 +10,7 @@
     <script type="text/javascript">
       var SOB = {};
 
-      var v = window.location.search.replace('?', '');
+      var v = window.location.search.replace('?', '').replace('/', '');
       SOB.bootstrap = 'bootstrap';
       if(['bootstrap', 'bootstrap-2.3.1'].indexOf(v) !== -1) {
         SOB.bootstrap = v;

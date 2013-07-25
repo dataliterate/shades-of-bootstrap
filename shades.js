@@ -161,6 +161,20 @@ function onCurveChange() {
 var Curve = window.Curve = new ColorCurve('shades-curve', onCurveChange);
 
 
+window.exportForSass = function()  {
+  var s = '';
+  $definition.find('tbody tr').each(function() {
+    var $rule = $(this);
+    var names = $rule.find('td:first').html().split('<br>');
+    var hex = $rule.find('input[type=color]:last').val();
+    $.each(names, function(i, name) {
+      s += name.replace('@', '$').replace(/^\s+|\s+$/g, '') + ': ' + hex
+      s += "\n";
+    })
+    s += "\n\n";
+  });
+  console.log(s);
+}
 
 $.get(SOB.bootstrap + '/less/variables.less')
  .done(function(data) {
